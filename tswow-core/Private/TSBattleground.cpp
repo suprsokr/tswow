@@ -989,3 +989,101 @@ TSBattlegroundScore TSBattleground::LGetScore1(TSNumber<uint32> guid)
 {
     return GetScore(guid);
 }
+
+// @tswow-begin: Implementation of TSPVPLogData_Player wrapper
+#include "BattlegroundPackets.h"
+
+TS_CLASS_DEFINITION(TSPVPLogData_Player, WorldPackets::Battleground::PVPLogData_Player, m_data)
+
+uint64 TSPVPLogData_Player::GetPlayerGUID() const
+{
+    return m_data->PlayerGUID.GetRawValue();
+}
+
+TSNumber<uint32> TSPVPLogData_Player::GetKills() const
+{
+    return m_data->Kills;
+}
+
+TSNumber<uint32> TSPVPLogData_Player::GetHonorKills() const
+{
+    if (auto* honor = std::get_if<WorldPackets::Battleground::PVPLogData_Honor>(&m_data->HonorOrFaction))
+        return honor->HonorKills;
+    return 0;
+}
+
+TSNumber<uint32> TSPVPLogData_Player::GetDeaths() const
+{
+    if (auto* honor = std::get_if<WorldPackets::Battleground::PVPLogData_Honor>(&m_data->HonorOrFaction))
+        return honor->Deaths;
+    return 0;
+}
+
+TSNumber<uint32> TSPVPLogData_Player::GetContributionPoints() const
+{
+    if (auto* honor = std::get_if<WorldPackets::Battleground::PVPLogData_Honor>(&m_data->HonorOrFaction))
+        return honor->ContributionPoints;
+    return 0;
+}
+
+TSNumber<uint32> TSPVPLogData_Player::GetDamageDone() const
+{
+    return m_data->DamageDone;
+}
+
+TSNumber<uint32> TSPVPLogData_Player::GetHealingDone() const
+{
+    return m_data->HealingDone;
+}
+
+void TSPVPLogData_Player::SetPlayerGUID(uint64 guid)
+{
+    m_data->PlayerGUID = ObjectGuid(guid);
+}
+
+void TSPVPLogData_Player::SetKills(uint32 value)
+{
+    m_data->Kills = value;
+}
+
+void TSPVPLogData_Player::SetHonorKills(uint32 value)
+{
+    if (auto* honor = std::get_if<WorldPackets::Battleground::PVPLogData_Honor>(&m_data->HonorOrFaction))
+        honor->HonorKills = value;
+}
+
+void TSPVPLogData_Player::SetDeaths(uint32 value)
+{
+    if (auto* honor = std::get_if<WorldPackets::Battleground::PVPLogData_Honor>(&m_data->HonorOrFaction))
+        honor->Deaths = value;
+}
+
+void TSPVPLogData_Player::SetContributionPoints(uint32 value)
+{
+    if (auto* honor = std::get_if<WorldPackets::Battleground::PVPLogData_Honor>(&m_data->HonorOrFaction))
+        honor->ContributionPoints = value;
+}
+
+void TSPVPLogData_Player::SetDamageDone(uint32 value)
+{
+    m_data->DamageDone = value;
+}
+
+void TSPVPLogData_Player::SetHealingDone(uint32 value)
+{
+    m_data->HealingDone = value;
+}
+
+TSArray<uint32> TSPVPLogData_Player::GetStats()
+{
+    TSArray<uint32> arr;
+    for (uint32 stat : m_data->Stats)
+        arr.push(stat);
+    return arr;
+}
+
+void TSPVPLogData_Player::AddStat(uint32 value)
+{
+    m_data->Stats.push_back(value);
+}
+// @tswow-end

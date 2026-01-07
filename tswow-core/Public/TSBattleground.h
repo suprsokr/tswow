@@ -49,6 +49,34 @@ public:
 #define TS_TEAM_HORDE 1
 #define TS_TEAM_NEUTRAL 2
 
+// @tswow-begin: Wrapper for new structured battleground packet data
+namespace WorldPackets { namespace Battleground { struct PVPLogData_Player; } }
+
+class TC_GAME_API TSPVPLogData_Player
+{
+    TS_CLASS_DECLARATION(TSPVPLogData_Player, WorldPackets::Battleground::PVPLogData_Player, m_data);
+    
+    uint64 GetPlayerGUID() const;
+    TSNumber<uint32> GetKills() const;
+    TSNumber<uint32> GetHonorKills() const;
+    TSNumber<uint32> GetDeaths() const;
+    TSNumber<uint32> GetContributionPoints() const;
+    TSNumber<uint32> GetDamageDone() const;
+    TSNumber<uint32> GetHealingDone() const;
+    
+    void SetPlayerGUID(uint64 guid);
+    void SetKills(uint32 value);
+    void SetHonorKills(uint32 value);
+    void SetDeaths(uint32 value);
+    void SetContributionPoints(uint32 value);
+    void SetDamageDone(uint32 value);
+    void SetHealingDone(uint32 value);
+    
+    TSArray<uint32> GetStats();
+    void AddStat(uint32 value);
+};
+// @tswow-end
+
 class TC_GAME_API TSBattlegroundScore
 {
     TS_CLASS_DECLARATION(TSBattlegroundScore, BattlegroundScore, m_score);

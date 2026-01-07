@@ -4665,6 +4665,27 @@ declare interface TSBattlegroundScore {
     ModCustomAttr(key: string, value: int32): void
 }
 
+// @tswow-begin: New structured battleground packet data type
+declare interface TSPVPLogData_Player {
+    GetPlayerGUID(): uint64
+    GetKills(): TSNumber<uint32>
+    GetHonorKills(): TSNumber<uint32>
+    GetDeaths(): TSNumber<uint32>
+    GetContributionPoints(): TSNumber<uint32>
+    GetDamageDone(): TSNumber<uint32>
+    GetHealingDone(): TSNumber<uint32>
+    SetPlayerGUID(guid: uint64): void
+    SetKills(value: uint32): void
+    SetHonorKills(value: uint32): void
+    SetDeaths(value: uint32): void
+    SetContributionPoints(value: uint32): void
+    SetDamageDone(value: uint32): void
+    SetHealingDone(value: uint32): void
+    GetStats(): TSArray<uint32>
+    AddStat(value: uint32): void
+}
+// @tswow-end
+
 
 declare interface TSBattleground extends TSMap {
     IsNull() : bool
@@ -8962,8 +8983,9 @@ declare namespace _hidden {
         OnEndEarly(callback: (bg: TSBattleground,winner: TSMutableNumber<uint32>)=>void): T
         OnEndEarly(id: EventID, callback: (bg: TSBattleground,winner: TSMutableNumber<uint32>)=>void): T
 
-        OnSendScore(callback: (bg: TSBattleground, score: TSBattlegroundScore, packet: TSWorldPacket, cancel: TSMutable<bool,bool>)=>void): T
-        OnSendScore(id: EventID, callback: (bg: TSBattleground, score: TSBattlegroundScore, packet: TSWorldPacket, cancel: TSMutable<bool,bool>)=>void): T
+        // @tswow-note: Updated for new structured packet API (TSWorldPacket -> TSPVPLogData_Player)
+        OnSendScore(callback: (bg: TSBattleground, score: TSBattlegroundScore, playerData: TSPVPLogData_Player, cancel: TSMutable<bool,bool>)=>void): T
+        OnSendScore(id: EventID, callback: (bg: TSBattleground, score: TSBattlegroundScore, playerData: TSPVPLogData_Player, cancel: TSMutable<bool,bool>)=>void): T
 
         /**
          * Note that "winner" can no longer be changed at this stage,

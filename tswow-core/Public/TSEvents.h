@@ -754,7 +754,8 @@ struct TSEvents
         ID_EVENT(OnOpenDoors, TSBattleground)
         ID_EVENT(OnCloseDoors, TSBattleground)
         ID_EVENT(OnReset, TSBattleground)
-        ID_EVENT(OnSendScore, TSBattleground, TSBattlegroundScore, TSWorldPacket, TSMutable<bool,bool> cancel)
+        // @tswow-note: Updated for new structured packet API (WorldPacket -> TSPVPLogData_Player)
+        ID_EVENT(OnSendScore, TSBattleground, TSBattlegroundScore, TSPVPLogData_Player, TSMutable<bool,bool> cancel)
         // requires special handling functions
         ID_EVENT(OnAchievementCriteria
             , TSBattleground
